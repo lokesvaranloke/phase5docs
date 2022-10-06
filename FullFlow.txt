@@ -1,0 +1,42 @@
+1)create a project
+2)push to git
+3)create a ec2 instance - create new keypair with .pem or .ppk formate
+if .pem means convert it using puttygen
+or .ppk means use it directly
+4)allow http traffic
+5)open advance then paste jenkins-userdata - create instance
+6)copy public ip
+7) open putty - load existing and change the ip and open ssh then auth then load new keypair and give open
+8) run sudo cat /var/log/cloud-init-output.log
+9) check versions java --version, mvn --version, git --version
+10) then go to ec2 security then edit inbound rules then add 8080 port
+11) copy ip address and paste in browser with :8080 - it will open jenkins
+12) then paste the link given in that page with sudo cat ####### - then give enter password will come page that
+13) new item - #name - freestyleproject then ok
+14) select git - paste git link - change branch
+15) build steps - add steps - invoke top level maven - give clean package then save
+16) then build project if success then to check the output go to project folder in that target folder then go to cmd then type java -jar #snapshotfilename.jar
+then open localhost:8080/#getmappingurl
+#next to add to s3
+17) go to jenkins then manage jenkin - available - search s3 publisher then install without restart
+18) go to aws IAM create new user with access key - select attact existing policies and in that administrator access then download.csv then create user
+19) manage jenkins - configure systems - amazon s3 profile - give profile name - give access and secret key then test connection and save
+20) go to aws s3 - create bucket 
+21) post action - publish artifact to s3 - select s3 profile - in source give target/*.jar in destination give your destination s3 bucket - give crt region
+then save - build now
+if build success then check s3 bucket whether the project is uploaded to s3
+#then to deploy 
+22) create new instance call deployment - give keypair - allow http - then create
+then connect to that ec2 instance
+23) in linux console check for java -version if it is not there
+then install using sudo yum install java-17-amazon-corretto-headless
+after installing check for java version if exits
+then 
+24) go to IAM create role - aws service - ec2 - search s3read and select amazons3readonly - give name and create
+25) select deployment ec2 and go to actions - security - modify IAM role - select role and save
+go to linux console
+26) create dir using mkdir app - cd app - aws s3 cp s3://#bucketname/#bucketobjectname app.jar
+after downloading
+27) java -jar app.jar
+then go to ec2 deyployment security edit inbound add 8080 
+then copy public ip paste in browser with :8080/#getmappingrole
